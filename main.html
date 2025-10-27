@@ -3,88 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ARC-V Access Login</title>
+  <title>ARC-V Central Command</title>
   <style>
     body {
       background-color: #000;
       color: #0ff;
       font-family: "Courier New", monospace;
       text-align: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       margin: 0;
+      padding: 0;
     }
-    .login-box {
+    header {
+      background-color: #020202;
+      padding: 20px;
+      border-bottom: 2px solid #0ff;
+    }
+    h1 {
+      letter-spacing: 3px;
+    }
+    .console {
+      margin: 50px auto;
+      width: 80%;
       border: 2px solid #0ff;
-      padding: 30px;
       border-radius: 10px;
-      background-color: rgba(0,0,0,0.85);
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.8);
       box-shadow: 0 0 20px #0ff;
     }
-    input[type="text"], input[type="password"] {
-      width: 80%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #0ff;
+    a button {
       background-color: black;
+      border: 1px solid #0ff;
       color: #0ff;
-      font-family: "Courier New", monospace;
-    }
-    button {
       padding: 10px 20px;
-      border: 1px solid #0ff;
-      background-color: black;
-      color: #0ff;
+      margin: 10px;
       cursor: pointer;
+      transition: 0.3s;
       font-family: "Courier New", monospace;
     }
-    button:hover {
+    a button:hover {
       background-color: #0ff;
       color: black;
       box-shadow: 0 0 10px #0ff;
     }
-    .error {
-      color: red;
-      margin-top: 10px;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
-  <div class="login-box">
-    <h1>ARC-V ACCESS LOGIN</h1>
-    <p>Enter your operative credentials:</p>
-    <input type="text" id="username" placeholder="Username"><br>
-    <input type="password" id="password" placeholder="Access Code"><br>
-    <button onclick="login()">Enter</button>
-    <div id="errorMsg" class="error"></div>
+  <header>
+    <h1>ARC-V CENTRAL COMMAND</h1>
+    <p>Absolute Regional Control – Vantablack</p>
+  </header>
+
+  <div class="console">
+    <h2>System Interface</h2>
+
+    <a href="aircraft.html"><button>Aircraft Systems</button></a>
+    <a href="mcv.html"><button>MCV Operations</button></a>
+    <a href="agents.html"><button>Agent Network</button></a>
+    <a href="intel.html"><button>Intelligence Hub</button></a>
+    <a href="missions.html"><button>Mission Control</button></a>
+    <a href="agent-profile.html"><button>Agent Profile</button></a> <!-- NEW BUTTON -->
   </div>
 
-  <script>
-    function login() {
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      // Example credentials (you can change)
-      const validUser = "agent";
-      const validPass = "Ω1234";
-
-      if(username === validUser && password === validPass) {
-        localStorage.setItem("arcv_loggedin", "true");
-        window.location.href = "index.html"; // Redirect to Central Command
-      } else {
-        document.getElementById("errorMsg").textContent = "Access Denied. Invalid credentials.";
-      }
-    }
-
-    // Prevent access if already logged in
-    window.onload = function() {
-      if(localStorage.getItem("arcv_loggedin") === "true") {
-        window.location.href = "index.html";
-      }
-    }
-  </script>
+  <footer style="margin-top: 40px;">
+    <p>© 2025 ARC-V Directorate | Clearance Level: Ω</p>
+  </footer>
 </body>
 </html>
