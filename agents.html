@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARC-V Agent Network</title>
+  <style>
+    body { background-color: #000; color: #0ff; font-family: "Courier New", monospace; text-align: center; }
+    #content { opacity: 0; transition: opacity 1.5s ease; }
+    .typewriter {
+      display: inline-block; overflow: hidden; border-right: .15em solid #0ff;
+      white-space: nowrap; animation: typing 2s steps(40, end), blink-caret .75s step-end infinite;
+    }
+    @keyframes typing { from { width: 0 } to { width: 100% } }
+    @keyframes blink-caret { 50% { border-color: transparent } }
+    table { margin: 20px auto; border-collapse: collapse; border: 1px solid #0ff; width: 70%; }
+    th, td { border: 1px solid #0ff; padding: 8px; }
+    a { color: #0ff; text-decoration: none; border: 1px solid #0ff; padding: 5px 10px; border-radius: 5px; }
+    a:hover { background-color: #0ff; color: #000; }
+  </style>
+</head>
+<body onload="bootUp()">
+  <div id="loader" class="typewriter">Decrypting Personnel Network...</div>
+  <div id="content">
+    <h1>Agent Network Database</h1>
+    <table>
+      <tr><th>Codename</th><th>Division</th><th>Status</th></tr>
+      <tr><td>VANTABLADE</td><td>Recon / Infiltration</td><td>Deployed</td></tr>
+      <tr><td>EMBERFOX</td><td>Cyber Division</td><td>Active</td></tr>
+      <tr><td>IRONSPINE</td><td>Field Command</td><td>On Leave</td></tr>
+      <tr><td>SPECTRE-9</td><td>Special Ops</td><td>Unknown</td></tr>
+    </table>
+    <p><a href="main.html">← Return to Central Command</a></p>
+  </div>
+
+  <script>
+    function bootUp() {
+      setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("content").style.opacity = "1";
+      }, 2500);
+    }
+  </script>
+</body>
+</html>

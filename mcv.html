@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCV Operations</title>
+  <style>
+    body { background-color: #000; color: #0ff; font-family: "Courier New", monospace; text-align: center; }
+    #content { opacity: 0; transition: opacity 1.5s ease; }
+    .typewriter {
+      display: inline-block; overflow: hidden; border-right: .15em solid #0ff;
+      white-space: nowrap; animation: typing 2s steps(40, end), blink-caret .75s step-end infinite;
+    }
+    @keyframes typing { from { width: 0 } to { width: 100% } }
+    @keyframes blink-caret { 50% { border-color: transparent } }
+    a { color: #0ff; text-decoration: none; border: 1px solid #0ff; padding: 5px 10px; border-radius: 5px; }
+    a:hover { background-color: #0ff; color: #000; }
+  </style>
+</head>
+<body onload="bootUp()">
+  <div id="loader" class="typewriter">Loading Modular Combat Vehicle Data...</div>
+  <div id="content">
+    <h1>MCV Tactical Operations</h1>
+    <p>Model: MCV-09 “Obsidian Fang”</p>
+    <p>Status: ACTIVE</p>
+    <p>Location: Eastern Perimeter Zone</p>
+    <p>Armament: Modular Railgun / EMP Pulse Core / Adaptive Armor</p>
+    <p>Commander: Major I. Templar</p>
+    <p><a href="main.html">← Return to Central Command</a></p>
+  </div>
+
+  <script>
+    function bootUp() {
+      setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("content").style.opacity = "1";
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
