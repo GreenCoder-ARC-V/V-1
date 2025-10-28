@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARC-V Aircraft Systems</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #0ff;
+      font-family: "Courier New", monospace;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #020202;
+      padding: 20px;
+      border-bottom: 2px solid #0ff;
+    }
+    .console {
+      margin: 50px auto;
+      width: 80%;
+      border: 2px solid #0ff;
+      border-radius: 10px;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.85);
+      box-shadow: 0 0 20px #0ff;
+    }
+    button {
+      background-color: black;
+      border: 1px solid #0ff;
+      color: #0ff;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #0ff;
+      color: black;
+    }
+    input, textarea {
+      background-color: black;
+      color: #0ff;
+      border: 1px solid #0ff;
+      padding: 8px;
+      margin: 5px;
+      width: 80%;
+      font-family: "Courier New", monospace;
+    }
+    .info-box {
+      border-top: 1px solid #0ff;
+      margin-top: 20px;
+      padding-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ARC-V AIRCRAFT SYSTEMS</h1>
+  </header>
+
+  <div class="console">
+    <h2>Registered Aircraft</h2>
+    <div id="aircraftList"></div>
+
+    <div class="info-box" id="aircraftInfo" style="display:none;">
+      <h3 id="jetName"></h3>
+      <p id="jetInfo"></p>
+    </div>
+
+    <hr style="margin:30px 0; border-color:#0ff;">
+    <h2>Add New Aircraft</h2>
+    <input type="text" id="newName" placeholder="Aircraft Name"><br>
+    <textarea id="newInfo" placeholder="Aircraft Information" rows="4"></textarea><br>
+    <button onclick="addAircraft()">Add Aircraft</button>
+  </div>
+
+  <script>
+    function loadAircraft() {
+      const data = JSON.parse(localStorage.getItem("arcv_aircraft")) || [
+        { name: "AAC-14 Phantom Tempest", info: "Stealth supersonic jet equipped with adaptive cloaking and AI flight control." },
+        { name: "AAC-12 Black Talon", info: "Multi-role strike jet designed for deep reconnaissance and precision missions." }
+      ];
+
+      const listDiv = document.getElementById("aircraftList");
+      listDiv.innerHTML = "";
+
+      data.forEach((jet, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = jet.name;
+        btn.onclick = () => showAircraft(index);
+        listDiv.appendChild(btn);
+      });
+
+      localStorage.setItem("arcv_aircraft", JSON.stringify(data));
+    }
+
+    function showAircraft(index) {
+      const data = JSON.parse(localStorage.getItem("arcv_aircraft")) || [];
+      const jet = data[index];
+      document.getElementById("jetName").textContent = jet.name;
+      document.getElementById("jetInfo").textContent = jet.info;
+      document.getElementById("aircraftInfo").style.display = "block";
+    }
+
+    function addAircraft() {
+      const name = document.getElementById("newName").value.trim();
+      const info = document.getElementById("newInfo").value.trim();
+      if (!name || !info) return alert("Please fill out all fields.");
+
+      const data = JSON.parse(localStorage.getItem("arcv_aircraft")) || [];
+      data.push({ name, info });
+      localStorage.setItem("arcv_aircraft", JSON.stringify(data));
+
+      document.getElementById("newName").value = "";
+      document.getElementById("newInfo").value = "";
+      loadAircraft();
+    }
+
+    window.onload = loadAircraft;
+  </script>
+</body>
+</html>
