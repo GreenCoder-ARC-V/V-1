@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARC-V Agent Profile</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #0ff;
+      font-family: "Courier New", monospace;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #020202;
+      padding: 20px;
+      border-bottom: 2px solid #0ff;
+    }
+    .console {
+      margin: 50px auto;
+      width: 80%;
+      border: 2px solid #0ff;
+      border-radius: 10px;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.8);
+      box-shadow: 0 0 20px #0ff;
+    }
+    input {
+      background-color: black;
+      color: #0ff;
+      border: 1px solid #0ff;
+      padding: 8px;
+      margin: 5px;
+      width: 80%;
+    }
+    button {
+      background-color: black;
+      border: 1px solid #0ff;
+      color: #0ff;
+      padding: 10px 20px;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #0ff;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ARC-V AGENT PROFILE</h1>
+  </header>
+
+  <div class="console">
+    <div id="profileForm">
+      <h2>Enter Agent Information</h2>
+      <input type="text" id="realName" placeholder="Real Name"><br>
+      <input type="text" id="codeName" placeholder="Code Name"><br>
+      <input type="text" id="clearanceLevel" placeholder="Clearance Level"><br>
+      <input type="text" id="group" placeholder="Group"><br>
+      <button onclick="saveProfile()">Save Profile</button>
+    </div>
+
+    <div id="profileDisplay" style="display:none;">
+      <h2>Agent Information</h2>
+      <p><strong>Real Name:</strong> <span id="dispReal"></span></p>
+      <p><strong>Code Name:</strong> <span id="dispCode"></span></p>
+      <p><strong>Clearance Level:</strong> <span id="dispClearance"></span></p>
+      <p><strong>Group:</strong> <span id="dispGroup"></span></p>
+    </div>
+  </div>
+
+  <script>
+    function saveProfile() {
+      const profile = {
+        realName: document.getElementById("realName").value.trim(),
+        codeName: document.getElementById("codeName").value.trim(),
+        clearanceLevel: document.getElementById("clearanceLevel").value.trim(),
+        group: document.getElementById("group").value.trim()
+      };
+      localStorage.setItem("arcv_agent_profile", JSON.stringify(profile));
+      showProfile();
+    }
+
+    function showProfile() {
+      const data = JSON.parse(localStorage.getItem("arcv_agent_profile"));
+      if (data) {
+        document.getElementById("profileForm").style.display = "none";
+        document.getElementById("profileDisplay").style.display = "block";
+        document.getElementById("dispReal").textContent = data.realName;
+        document.getElementById("dispCode").textContent = data.codeName;
+        document.getElementById("dispClearance").textContent = data.clearanceLevel;
+        document.getElementById("dispGroup").textContent = data.group;
+      }
+    }
+
+    // Auto-display saved profile if it exists
+    window.onload = showProfile;
+  </script>
+</body>
+</html>
