@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARC-V Mission Control</title>
+  <style>
+    body { background-color: #000; color: #0ff; font-family: "Courier New", monospace; text-align: center; }
+    #content { opacity: 0; transition: opacity 1.5s ease; }
+    .typewriter {
+      display: inline-block; overflow: hidden; border-right: .15em solid #0ff;
+      white-space: nowrap; animation: typing 2s steps(40, end), blink-caret .75s step-end infinite;
+    }
+    @keyframes typing { from { width: 0 } to { width: 100% } }
+    @keyframes blink-caret { 50% { border-color: transparent } }
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      border: 1px solid #0ff;
+      width: 80%;
+    }
+    th, td {
+      border: 1px solid #0ff;
+      padding: 8px;
+    }
+    th {
+      background-color: rgba(0,255,255,0.1);
+    }
+    form {
+      margin: 20px auto;
+      width: 80%;
+      border: 1px solid #0ff;
+      border-radius: 10px;
+      padding: 10px;
+    }
+    input, select, textarea {
+      background-color: black;
+      color: #0ff;
+      border: 1px solid #0ff;
+      padding: 5px;
+      margin: 5px;
+      font-family: "Courier New", monospace;
+    }
+    textarea {
+      width: 60%;
+      height: 60px;
+      resize: none;
+    }
+    button {
+      background-color: black;
+      color: #0ff;
+      border: 1px solid #0ff;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0ff;
+      color: black;
+    }
+    a {
+      color: #0ff;
+      text-decoration: none;
+      border: 1px solid #0ff;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+    a:hover {
+      background-color: #0ff;
+      color: #000;
+    }
+    /* Mission detail popup */
+    #detailBox {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0,0,0,0.95);
+      border: 2px solid #0ff;
+      border-radius: 10px;
+      padding: 20px;
+      width: 60%;
+      box-shadow: 0 0 20px #0ff;
+      z-index: 10;
+    }
+    #detailBox h2 { margin-top: 0; }
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 5;
+    }
+  </style>
+</head>
+<body onload="bootUp()">
+  <div id="loader" class="typewriter">Initializing Mission Control Database...</div>
+  <div id="content">
+    <h1>ARC-V Mission Control</h1>
+
+    <form id="missionForm">
+      <h3>Add New Mission</h3>
+      <input type="text" id="missionName" placeholder="Mission Name" required>
+      <select id="missionType" required>
+        <option value="">-- Type --</option>
+        <option>Reconnaissance</option>
+        <option>Infiltration</option>
+        <option>Cyber Operation</option>
+        <option>Extraction</option>
+        <option>Direct Assault</option>
+        <option>Special Ops</option>
+		<option>War Plan</option>
+      </select>
+      <select id="missionStatus" required>
+        <option value="">-- Status --</option>
+        <option>Pending</option>
+        <option>Active</option>
+        <option>Ongoing</option>
+        <option>Completed</option>
+        <option>Standby</option>
+      </select><br>
+      <textarea id="missionDesc" placeholder="Enter mission details..." required></textarea><br>
+      <button type="submit">Add Mission</button>
+    </form>
+
+    <table id="missionTable">
+      <tr><th>Mission Name</th><th>Type</th><th>Status</th><th>Action</th></tr>
+    </table>
+
+    <p><a href="main.html">← Return to Central Command</a></p>
+  </div>
+
+  <!-- Overlay and Detail Box -->
+  <div id="overlay"></div>
+  <div id="detailBox">
+    <h2 id="detailName"></h2>
+    <p><b>Type:</b> <span id="detailType"></span></p>
+    <p><b>Status:</b> <span id="detailStatus"></span></p>
+    <p><b>Description:</b></p>
+    <p id="detailDesc"></p>
+    <button onclick="closeDetails()">Close</button>
+  </div>
+
+  <script>
+    function bootUp() {
+      setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("content").style.opacity = "1";
+        loadMissions();
+      }, 2500);
+    }
+
+    function loadMissions() {
+      const missions = JSON.parse(localStorage.getItem("arcv_missions")) || [
+        {name: "BLACK STORM", type: "Reconnaissance", status: "Active", desc: "High-altitude recon over restricted zones."},
+        {name: "IRON VEIL", type: "Infiltration", status: "Pending", desc: "Stealth entry into secured enemy facility."},
+        {name: "GLASS TIDE", type: "Cyber Operation", status: "Ongoing", desc: "Digital breach in adversary network systems."},
+        {name: "OBSIDIAN DAWN", type: "Extraction", status: "Completed", desc: "Recovered priority intel asset safely."},
+        {name: "VANTABURN", type: "Direct Assault", status: "Standby", desc: "Awaiting command for high-impact strike operation."}
+      ];
+      const table = document.getElementById("missionTable");
+      missions.forEach((m, i) => {
+        const row = table.insertRow();
+        const nameCell = row.insertCell(0);
+        const link = document.createElement("a");
+        link.href = "#";
+        link.textContent = m.name;
+        link.style.color = "#0ff";
+        link.onclick = () => showDetails(i);
+        nameCell.appendChild(link);
+        row.insertCell(1).textContent = m.type;
+        row.insertCell(2).textContent = m.status;
+        const del = row.insertCell(3);
+        const btn = document.createElement("button");
+        btn.textContent = "Remove";
+        btn.onclick = () => removeMission(i);
+        del.appendChild(btn);
+      });
+      localStorage.setItem("arcv_missions", JSON.stringify(missions));
+    }
+
+    document.getElementById("missionForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const name = document.getElementById("missionName").value.trim();
+      const type = document.getElementById("missionType").value;
+      const status = document.getElementById("missionStatus").value;
+      const desc = document.getElementById("missionDesc").value.trim();
+      if (!name || !type || !status || !desc) return;
+
+      const missions = JSON.parse(localStorage.getItem("arcv_missions")) || [];
+      missions.push({name, type, status, desc});
+      localStorage.setItem("arcv_missions", JSON.stringify(missions));
+      document.getElementById("missionTable").innerHTML = "<tr><th>Mission Name</th><th>Type</th><th>Status</th><th>Action</th></tr>";
+      loadMissions();
+      this.reset();
+    });
+
+    function removeMission(index) {
+      const missions = JSON.parse(localStorage.getItem("arcv_missions")) || [];
+      missions.splice(index, 1);
+      localStorage.setItem("arcv_missions", JSON.stringify(missions));
+      document.getElementById("missionTable").innerHTML = "<tr><th>Mission Name</th><th>Type</th><th>Status</th><th>Action</th></tr>";
+      loadMissions();
+    }
+
+    function showDetails(index) {
+      const missions = JSON.parse(localStorage.getItem("arcv_missions")) || [];
+      const m = missions[index];
+      document.getElementById("detailName").textContent = m.name;
+      document.getElementById("detailType").textContent = m.type;
+      document.getElementById("detailStatus").textContent = m.status;
+      document.getElementById("detailDesc").textContent = m.desc;
+      document.getElementById("overlay").style.display = "block";
+      document.getElementById("detailBox").style.display = "block";
+    }
+
+    function closeDetails() {
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("detailBox").style.display = "none";
+    }
+  </script>
+</body>
+</html>
